@@ -1,0 +1,22 @@
+# Environment variables & secrets
+.env
+
+# Personal resume (keep private, use cv.example.tex for public template)
+cv.tex
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python cache & build
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Output files
+out/
+
+# IDE files
+.vscode/
+.idea/
