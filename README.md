@@ -71,10 +71,12 @@ CV_NAMING_TEMPLATE='{name}_Your_Next_{role}.pdf'
 
 #### How to get your Overleaf credentials:
 1. **`OVERLEAF_SESSION`**:
-   - Log into [Overleaf](https://www.overleaf.com).
-   - Press `F12` to open Developer Tools &rarr; **Application** tab (Chrome/Edge) or **Storage** tab (Firefox).
-   - Expand **Cookies** &rarr; `https://www.overleaf.com`.
-   - Copy the value of the **`overleaf_session2`** cookie.
+   - **Why this is needed**: Overleaf does not provide public API keys for personal accounts. The `overleaf_session2` cookie acts as your authenticated session token, allowing the script to upload files, trigger compilation, and download PDFs headlessly in the background without needing a browser window.
+   - **How to get it**:
+     1. Log into [Overleaf](https://www.overleaf.com) in your browser.
+     2. Press `F12` to open Developer Tools &rarr; select the **Application** tab (Chrome/Edge/Brave) or **Storage** tab (Firefox).
+     3. In the left panel, expand **Cookies** &rarr; click `https://www.overleaf.com`.
+     4. Find the cookie named **`overleaf_session2`** and copy its full value.
 2. **`OVERLEAF_PROJECT_ID`**:
    - Open your Overleaf CV project.
    - Look at the browser URL: `https://www.overleaf.com/project/<PROJECT_ID>`.
