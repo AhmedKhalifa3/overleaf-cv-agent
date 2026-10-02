@@ -21,7 +21,7 @@ try:
 except ImportError:
     from mcp.server.fastmcp import FastMCP
 
-from main import generate_cv
+from main import generate_cv, count_pdf_pages
 
 mcp = FastMCP("Overleaf CV Compiler")
 
@@ -42,7 +42,7 @@ def compile_cv(
         candidate_name: Optional candidate name override if different from .env.
 
     Returns:
-        The local file path where the compiled PDF is saved.
+        The local file path where the compiled PDF is saved, including page count validation.
     """
     try:
         pdf_path = generate_cv(
@@ -53,7 +53,14 @@ def compile_cv(
             out_dir=str(PROJECT_ROOT / "out"),
         )
         abs_path = os.path.abspath(pdf_path)
-        return f"SUCCESS: PDF compiled and saved to: {abs_path}"
+        pages = count_pdf_pages(abs_path)
+
+        if pages > 1:
+            return (
+                f"WARNING: PDF compiled and saved to '{abs_path}', but it is {pages} PAGES LONG! "
+                f"The resume must fit on exactly 1 page. Please trim bullet points or consolidate content."
+            )
+        return f"SUCCESS: 1-page PDF successfully compiled and saved to: {abs_path}"
     except Exception as e:
         return f"ERROR compiling CV on Overleaf: {str(e)}"
 

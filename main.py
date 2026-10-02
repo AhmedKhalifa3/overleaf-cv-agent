@@ -4,7 +4,6 @@ from pathlib import Path
 import re
 import sys
 
-import pyoverleaf
 import requests
 
 # Base directory of this project
@@ -31,9 +30,11 @@ HOST = "https://www.overleaf.com"
 _cached_api = None
 
 
-def get_api(session_cookie: str = None) -> pyoverleaf.Api:
+def get_api(session_cookie: str = None):
     """Lazily initializes and returns an authenticated pyoverleaf API instance."""
     global _cached_api
+    import pyoverleaf
+
     cookie = session_cookie or os.environ.get("OVERLEAF_SESSION")
     if not cookie:
         raise ValueError(
@@ -68,7 +69,7 @@ def extract_latex(text: str) -> str:
     return text
 
 
-def upload_tex(project_id: str, content: str, name: str = "main.tex", api: pyoverleaf.Api = None):
+def upload_tex(project_id: str, content: str, name: str = "main.tex", api=None):
     """Uploads LaTeX content to the Overleaf project. Accepts either a file path or raw LaTeX string."""
     api = api or get_api()
 
@@ -84,7 +85,7 @@ def upload_tex(project_id: str, content: str, name: str = "main.tex", api: pyove
     api.project_upload_file(project_id, root.id, name, cleaned_content.encode("utf-8"))
 
 
-def compile_project(project_id: str, api: pyoverleaf.Api = None) -> dict:
+def compile_project(project_id: str, api=None) -> dict:
     """Triggers remote compilation of the project on Overleaf."""
     api = api or get_api()
     s = api._get_session()
@@ -178,6 +179,21 @@ def generate_cv(
     return rename_pdf(tmp, role, candidate_name=candidate_name)
 
 
+def count_pdf_pages(pdf_path: str) -> int:
+    """Returns the total number of pages in the generated PDF file."""
+    try:
+        from pypdf import PdfReader
+        reader = PdfReader(pdf_path)
+        return len(reader.pages)
+    except Exception:
+        try:
+            with open(pdf_path, "rb") as f:
+                content = f.read()
+            return max(1, len(re.findall(rb"/Type\s*/Page\b", content)))
+        except Exception:
+            return 1
+
+
 # ---------- CLI execution ----------
 if __name__ == "__main__":
     role = sys.argv[1] if len(sys.argv) > 1 else input("Role slug (e.g. Agent_Dev): ")
@@ -197,4 +213,7 @@ if __name__ == "__main__":
             source = input("LaTeX source (file path or text): ")
 
     final_path = generate_cv(role, source)
-    print("saved:", final_path)
+    pages = count_pdf_pages(final_path)
+    print(f"saved: {final_path} ({pages} page{'s' if pages != 1 else ''})")
+    if pages > 1:
+        print(f"⚠️ Warning: The compiled PDF has {pages} pages! Consider tightening bullet points to fit on 1 page.")

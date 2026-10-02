@@ -41,8 +41,8 @@
 ### 1. Clone & Set Up Python Environment
 
 ```bash
-git clone https://github.com/your-username/cv_agent.git
-cd cv_agent
+git clone https://github.com/AhmedKhalifa3/overleaf-cv-agent.git
+cd overleaf-cv-agent
 
 # Create and activate virtual environment
 python3 -m venv .venv
@@ -71,6 +71,10 @@ CV_NAMING_TEMPLATE='{name}_Your_Next_{role}.pdf'
 
 #### How to get your Overleaf credentials:
 1. **`OVERLEAF_SESSION`**:
+   - Log into [Overleaf](https://www.overleaf.com).
+   - Press `F12` to open Developer Tools &rarr; **Application** tab (Chrome/Edge) or **Storage** tab (Firefox).
+   - Expand **Cookies** &rarr; `https://www.overleaf.com`.
+   - Copy the value of the **`overleaf_session2`** cookie.
    - **Why this is needed**: Overleaf does not provide public API keys for personal accounts. The `overleaf_session2` cookie acts as your authenticated session token, allowing the script to upload files, trigger compilation, and download PDFs headlessly in the background without needing a browser window.
    - **How to get it**:
      1. Log into [Overleaf](https://www.overleaf.com) in your browser.
@@ -104,7 +108,7 @@ Whether using **Claude Projects**, **Custom GPTs**, **Gemini Gems**, or **Cursor
    - **Use your own instructions or ours**: You are completely free to write whatever custom prompts, tone, or tailoring guidelines you prefer.
    - **The only requirement**: You must explicitly instruct the AI to call the `compile_cv` tool once it finishes generating the LaTeX code. For example, add this line:
      > *"After tailoring the LaTeX code, call the `compile_cv` tool with the role slug and complete LaTeX code to compile and save the final PDF."*
-   - Or, simply copy our ready-made, battle-tested prompt from [`PROJECT_INSTRUCTIONS.md`](PROJECT_INSTRUCTIONS.md) which already includes strict 1-page budget rules and automatic compilation.
+   - Or, simply copy our ready-made, production-ready prompt from [`PROJECT_INSTRUCTIONS.md`](PROJECT_INSTRUCTIONS.md) which already includes strict 1-page budget rules and automatic compilation.
 
 ---
 
@@ -123,13 +127,13 @@ Add the `cv-compiler` entry under `mcpServers`:
 {
   "mcpServers": {
     "cv-compiler": {
-      "command": "/absolute/path/to/cv_agent/.venv/bin/python",
-      "args": ["/absolute/path/to/cv_agent/server.py"]
+      "command": "/absolute/path/to/overleaf-cv-agent/.venv/bin/python",
+      "args": ["/absolute/path/to/overleaf-cv-agent/server.py"]
     }
   }
 }
 ```
-*(On Windows, use python executable path like `"C:\\path\\to\\cv_agent\\.venv\\Scripts\\python.exe"`)*
+*(On Windows, use python executable path like `"C:\\path\\to\\overleaf-cv-agent\\.venv\\Scripts\\python.exe"`)*
 
 ##### 🔄 Restarting Claude Desktop:
 Claude Desktop only reads the configuration on a **full process launch**:
@@ -146,8 +150,8 @@ Claude Desktop only reads the configuration on a **full process launch**:
 3. You will see your server active:
    ```
    cv-compiler   [Running]
-   Command:      /path/to/cv_agent/.venv/bin/python
-   Arguments:    /path/to/cv_agent/server.py
+   Command:      /path/to/overleaf-cv-agent/.venv/bin/python
+   Arguments:    /path/to/overleaf-cv-agent/server.py
    [View logs]
    ```
 4. If it shows *"No servers added"*, an old instance was still running in the background; close it completely with `pkill -f claude-desktop` and restart.
@@ -162,7 +166,7 @@ Claude Desktop only reads the configuration on a **full process launch**:
 3. Fill in:
    - **Name**: `cv-compiler`
    - **Type**: `command`
-   - **Command**: `/absolute/path/to/cv_agent/.venv/bin/python /absolute/path/to/cv_agent/server.py`
+   - **Command**: `/absolute/path/to/overleaf-cv-agent/.venv/bin/python /absolute/path/to/overleaf-cv-agent/server.py`
 
 ---
 
@@ -174,8 +178,8 @@ Add to your `~/.codeium/windsurf/mcp_config.json`:
 {
   "mcpServers": {
     "cv-compiler": {
-      "command": "/absolute/path/to/cv_agent/.venv/bin/python",
-      "args": ["/absolute/path/to/cv_agent/server.py"]
+      "command": "/absolute/path/to/overleaf-cv-agent/.venv/bin/python",
+      "args": ["/absolute/path/to/overleaf-cv-agent/server.py"]
     }
   }
 }
@@ -236,21 +240,43 @@ print(f"Compiled PDF: {pdf_path}")
 
 ---
 
+## 🧪 Running Automated Tests
+
+A unit test suite is included to verify LaTeX extraction, PDF page-count validation, and filename formatting:
+
+```bash
+python3 -m unittest discover tests
+```
+
+---
+
+## 🔒 Security Notice & Cookie Lifecycle
+
+- **Session Confidentiality**: The `overleaf_session2` cookie grants access to your Overleaf account. Treat it like a password. Ensure `.env` is never committed (it is excluded by default in `.gitignore`).
+- **Cookie Expiration**: Overleaf session cookies typically remain valid for several weeks/months. If compilation suddenly fails with an authentication error (`401` or `403`), simply log into Overleaf again, copy the fresh `overleaf_session2` cookie, and update your `.env` file.
+- **Unofficial API**: Overleaf does not offer an official developer API for individual accounts; this tool interacts headlessly with Overleaf's web endpoints.
+
+---
+
 ## 📂 Project Structure
 
 ```text
-cv_agent/
-├── .env                         # Your private Overleaf session & config (git-ignored)
+overleaf-cv-agent/
+├── .env                         # Your private Overleaf credentials (git-ignored)
 ├── .env.example                 # Reference template for configuration
 ├── .gitignore                   # Keeps secrets, virtualenv, and PDFs safe
-├── cv.tex                       # Master LaTeX resume template
+├── LICENSE                      # MIT License
+├── cv.example.tex               # Public sample LaTeX template
+├── cv.tex                       # Master LaTeX resume (git-ignored for privacy)
 ├── main.py                      # Core compiler library & CLI
 ├── server.py                    # FastMCP server for AI assistants
 ├── requirements.txt             # Python dependencies
 ├── PROJECT_INSTRUCTIONS.md      # Universal prompt template for AI Projects
 ├── README.md                    # Complete documentation
-└── out/                         # Destination for generated PDFs
-    └── Your_Name_Your_Next_Agent_Dev.pdf
+├── tests/                       # Unit tests
+│   └── test_compiler.py
+└── out/                         # Destination for generated PDFs (git-ignored)
+    └── Candidate_Your_Next_Agent_Dev.pdf
 ```
 
 ---
