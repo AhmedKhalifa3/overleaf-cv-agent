@@ -98,7 +98,11 @@ cp cv.example.tex cv.tex
 
 Whether using **Claude Projects**, **Custom GPTs**, **Gemini Gems**, or **Cursor**:
 1. **Upload your master resume** (`cv.tex`) to your AI's Project Knowledge / Files.
-2. **Copy the universal prompt** from [`PROJECT_INSTRUCTIONS.md`](PROJECT_INSTRUCTIONS.md) and paste it into your AI's **Project Instructions** / **System Prompt**.
+2. **Configure your AI Instructions / System Prompt**:
+   - **Use your own instructions or ours**: You are completely free to write whatever custom prompts, tone, or tailoring guidelines you prefer.
+   - **The only requirement**: You must explicitly instruct the AI to call the `compile_cv` tool once it finishes generating the LaTeX code. For example, add this line:
+     > *"After tailoring the LaTeX code, call the `compile_cv` tool with the role slug and complete LaTeX code to compile and save the final PDF."*
+   - Or, simply copy our ready-made, battle-tested prompt from [`PROJECT_INSTRUCTIONS.md`](PROJECT_INSTRUCTIONS.md) which already includes strict 1-page budget rules and automatic compilation.
 
 ---
 

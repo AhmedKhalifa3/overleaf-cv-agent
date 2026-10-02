@@ -8,6 +8,8 @@
 > - **Cursor / Windsurf**: Save as `.cursorrules` in your project root.
 >
 > **Prerequisite:** Make sure your base `cv.tex` is uploaded to your AI Project Knowledge or workspace.
+>
+> 💡 **Custom Prompts:** You are free to customize these instructions or write your own from scratch! The only required instruction is that you tell the AI to call the `compile_cv` tool with the role slug and LaTeX content once it finishes tailoring.
 
 ---
 
