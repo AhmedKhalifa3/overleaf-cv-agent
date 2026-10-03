@@ -53,11 +53,19 @@ The generated resume MUST fit on exactly ONE page:
 - Strictly escape LaTeX special characters: `%` -> `\%`, `&` -> `\&`, `_` -> `\_`, `#` -> `\#`, `$` -> `\$`.
 - Ensure all environments (such as `\begin{itemize} ... \end{itemize}`) are balanced and closed.
 
-### Step 5: Automatic Compilation (MCP Tool)
-- When the tailored LaTeX is finalized, IMMEDIATELY call the `compile_cv` tool:
-  - `role`: The concise role slug (e.g. `Agent_Dev`).
-  - `latex_content`: The complete, runnable LaTeX document.
-- Report back to the candidate with:
-  1. A brief summary of key tailored points and matched keywords.
-  2. Confirmation of the compiled PDF path returned by the tool.
+### Step 5: Automatic Compilation & Notion Logging (MCP Tools)
+1. **Compile CV**: Immediately call the `compile_cv` tool:
+   - `role`: The concise role slug (e.g. `Agent_Dev`).
+   - `latex_content`: The complete, runnable LaTeX document.
+2. **Log to Notion Tracker**: Take the compiled PDF path returned by `compile_cv` and call `track_job_application` from `notion-job-tracker`:
+   - `company`: Target company name.
+   - `role`: Target role title.
+   - `job_url`: Job listing URL (if provided).
+   - `status`: "Applied" (or "Wishlist" if not yet submitted).
+   - `cv_file_path`: The full path to the compiled PDF file (uploads directly to Notion).
+   - `summary`: A 1–2 sentence overview of the target role and key requirements.
+   - `match_points`: 2–4 bullet points highlighting how the candidate's CV was tailored for this role.
+3. **Report back to the candidate**:
+   - A brief summary of key tailored points and matched keywords.
+   - Confirmation of the compiled PDF path and the Notion tracking link.
 ```

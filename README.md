@@ -281,6 +281,15 @@ overleaf-cv-agent/
 
 ---
 
+## 🔗 Pair with Notion Job Tracker MCP
+
+Supercharge your workflow by pairing **Overleaf CV Agent** with [Notion Job Tracker MCP](../notion-tracker-mcp):
+1. **Compile:** Overleaf CV Agent compiles your tailored PDF resume in seconds.
+2. **Auto-Log & Upload:** Notion Job Tracker automatically creates a card in your Notion applications board, categorizes the role, and uploads the generated PDF directly into the `CV` column.
+3. **Track & Prep:** Calculate response rates, get stale application alerts, draft follow-up messages, and generate custom interview cheat sheets from your saved history.
+
+---
+
 ## 📄 License
 
 MIT License. Free to use and customize for your career search!
