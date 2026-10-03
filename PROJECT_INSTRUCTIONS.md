@@ -57,7 +57,7 @@ The generated resume MUST fit on exactly ONE page:
 1. **Compile CV**: Immediately call the `compile_cv` tool:
    - `role`: The concise role slug (e.g. `Agent_Dev`).
    - `latex_content`: The complete, runnable LaTeX document.
-2. **Log to Notion Tracker**: Take the compiled PDF path returned by `compile_cv` and call `track_job_application` from `notion-job-tracker`:
+2. **Log to Notion Tracker**: Take the compiled PDF path returned by `compile_cv` and call `track_job_application` from [`notion-job-tracker`](https://github.com/AhmedKhalifa3/notion-tracker-mcp):
    - `company`: Target company name.
    - `role`: Target role title.
    - `job_url`: Job listing URL (if provided).
