@@ -1,5 +1,7 @@
 # 🚀 Overleaf CV Agent
 
+[![M8ven Score](https://m8ven.ai/badge/mcp/ahmedkhalifa3-overleaf-cv-agent-112ble?v=ebdbc289a289d8e6bd511d6c20e8ba5e)](https://m8ven.ai/mcp/ahmedkhalifa3-overleaf-cv-agent-112ble?s=readme)
+
 > Turn Claude, Cursor, Windsurf, or any AI into an autonomous CV tailoring agent that tailors your LaTeX resume to any job description and compiles ready-to-send PDFs in seconds via Overleaf.
 
 ---
